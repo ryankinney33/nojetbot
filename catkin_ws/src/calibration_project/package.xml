@@ -7,13 +7,14 @@
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
   <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
-  <maintainer email="ryguy@todo.todo">ryguy</maintainer>
+  <maintainer email="ryan.kinney@maine.edu">ryan</maintainer>
+  <maintainer email="carter.q.stevens@maine.edu">carter</maintainer>
 
 
   <!-- One license tag required, multiple allowed, one license per tag -->
   <!-- Commonly used license strings: -->
   <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
-  <license>TODO</license>
+  <license>NONE</license>
 
 
   <!-- Url tags are optional, but multiple are allowed, one per tag -->
@@ -32,7 +33,6 @@
   <!-- Dependencies can be catkin packages or system dependencies -->
   <!-- Examples: -->
   <!-- Use depend as a shortcut for packages that are both build and exec dependencies -->
-  <!--   <depend>roscpp</depend> -->
   <!--   Note that this is equivalent to the following: -->
   <!--   <build_depend>roscpp</build_depend> -->
   <!--   <exec_depend>roscpp</exec_depend> -->
@@ -49,6 +49,11 @@
   <!-- Use doc_depend for packages you need only for building documentation: -->
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
+  <depend>roscpp</depend>
+  <depend>rospy</depend>
+  <depend>libopencv-dev</depend>
+  <depend>cv_bridge</depend>
+  <build_depend>std_msgs</build_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
