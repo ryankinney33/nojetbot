@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
 	cv::imshow("windowname", img);
 	cv::waitKey(-1);
 
-	cv::Size patternsize(9,6); // number of centers
+	cv::Size patternsize(6,9); // number of centers
 
 	// Matrices to hold the points
 	std::vector<Eigen::Vector3d> u_i;
@@ -50,6 +50,15 @@ int main(int argc, char *argv[]) {
 	for (auto iter : u_i) {
 		std::cout << iter(0) << "\t" << iter(1) << "\t" << iter(2) << std::endl;
 	}
+
+	std::vector<Eigen::Vector3d> X_i;
+	get_3d_points(6, 9, 1, X_i);
+	std::cout << std::endl;
+	// Print the points to stdout
+	for (auto iter : X_i) {
+		std::cout << iter(0) << "\t" << iter(1) << "\t" << iter(2) << std::endl;
+	}
+
 
 	cv::imshow("windowname", img_corners);
 	cv::waitKey(-1);

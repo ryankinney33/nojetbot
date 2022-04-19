@@ -51,3 +51,37 @@ bool get_chessboard_points(cv::Mat &img, const cv::Size &patternsize,
 	return true;
 }
 
+// Gets the 3D representation of the chessboard points
+void get_3d_points(int width, int height, double square_size, std::vector<Eigen::Vector3d> &X_i)
+{
+	Eigen::Vector3d temp;
+
+	/*
+	 * Assumptions:
+	 *   1. The left chessboard was detected first
+	 *   2. The top left point was the first detected
+	 *   3. The z-axis is the horizontal position of the left board
+	 *   4. The y-axis is the horizontal position of the right board
+	 *   5. The x-axis is the vertical position on the board
+	 */
+
+	// Go through the left chessboard first
+	temp(1) = 0.0; // y = 0 on left chessboard
+	for (int i = 0; i < height; ++i) {
+		temp(0) = i + 1; // Points start at 1 unit down
+		for (int j = 0; j < width; ++j) {
+			temp(2) = width + 1 - j; // Points start at width + 1 units left
+			X_i.push_back(square_size * temp);
+		}
+	}
+
+	// Go through the right chessboard first
+	temp(2) = 0; // z = 0 on right chessboard
+	for (int i = 0; i < height; ++i) {
+		temp(0) = i + 1; // Points start at 1 unit down
+		for (int j = 0; j < width; ++j) {
+			temp(1) = j + 2; // Points start at 2 units right
+			X_i.push_back(square_size * temp);
+		}
+	}
+}
