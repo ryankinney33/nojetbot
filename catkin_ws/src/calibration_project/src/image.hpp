@@ -12,7 +12,7 @@
 #include <vector>
 
 // Convert the image centers into an eigen matrix
-static Eigen::MatrixXd centers_to_eigen(const std::vector<Cv::Point2f> &centers);
+static Eigen::MatrixXd centers_to_eigen(const std::vector<cv::Point2f> &centers);
 
 
 // Gets the chessboard points in an image

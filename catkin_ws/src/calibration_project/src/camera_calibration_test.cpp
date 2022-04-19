@@ -1,3 +1,5 @@
+#include "image.hpp"
+
 #include <opencv2/calib3d.hpp>
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
@@ -36,26 +38,20 @@ int main(int argc, char *argv[]) {
 	cv::waitKey(-1);
 
 	cv::Size patternsize(9,6); // number of centers
-	std::vector<cv::Point2f> centers; // filled by the detected centers
-	bool patternfound = cv::findChessboardCornersSB(img, patternsize, centers);
 
+	// Matrices to hold the points
+	Eigen::MatrixXd us, ups;
+
+	// Get the points
+	bool patternfound = get_chessboard_points(img_corners, patternsize, us, ups);
 	if (!patternfound) {
 		std::cerr << "Pattern not found." << std::endl;
 		return -1;
 	}
 
-	cv::Mat centers_mat(centers);
-
-	cv::drawChessboardCorners(img, patternsize, centers_mat, patternfound);
-	cv::drawChessboardCorners(img_corners, patternsize, centers_mat, patternfound);
-
-	patternfound = cv::findChessboardCornersSB(img, patternsize, centers);
-	if (!patternfound) {
-		std::cerr << "Pattern not found." << std::endl;
-		return -1;
-	}
-
-	cv::drawChessboardCorners(img_corners, patternsize, centers_mat, patternfound);
+	// Print the points to stdout
+	std::cout << "us:\n" << us << std::endl;
+	std::cout << "ups:\n" << ups << std::endl;
 
 	cv::imshow("windowname", img_corners);
 	cv::waitKey(-1);
