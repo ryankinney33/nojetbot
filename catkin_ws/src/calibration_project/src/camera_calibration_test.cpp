@@ -37,18 +37,19 @@ int main(int argc, char *argv[]) {
 	cv::Size patternsize(9,6); // number of centers
 
 	// Matrices to hold the points
-	Eigen::MatrixXd us, ups;
+	std::vector<Eigen::Vector3d> u_i;
 
 	// Get the points
-	bool patternfound = get_chessboard_points(img_corners, patternsize, us, ups);
+	bool patternfound = get_chessboard_points(img_corners, patternsize, u_i);
 	if (!patternfound) {
 		std::cerr << "Pattern not found." << std::endl;
 		return -1;
 	}
 
 	// Print the points to stdout
-	std::cout << "us:\n" << us << std::endl;
-	std::cout << "ups:\n" << ups << std::endl;
+	for (auto iter : u_i) {
+		std::cout << iter(0) << "\t" << iter(1) << "\t" << iter(2) << std::endl;
+	}
 
 	cv::imshow("windowname", img_corners);
 	cv::waitKey(-1);

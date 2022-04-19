@@ -1,29 +1,28 @@
 #include <opencv2/calib3d.hpp>
 #include <opencv2/core.hpp>
-//#include <opencv2/imgcodecs.hpp>
 #include <Eigen/Dense>
 #include <iostream>
 
+#include "image.hpp"
+
 // Convert the image centers into an eigen matrix
-static Eigen::MatrixXd centers_to_eigen(const std::vector<cv::Point2f> &centers)
+static void centers_to_eigen(const std::vector<cv::Point2f> &centers,
+		std::vector<Eigen::Vector3d> &u_i)
 {
-	// The matrix that holds the points
-	Eigen::MatrixXd corners(centers.size(), 3);
+	Eigen::Vector3d temp;
+	temp(2) = 1;
 
 	// Iterate over the points in the vector
-	for (int i = 0; i < centers.size(); ++i) {
-		corners(i, 0) = centers[i].x;
-		corners(i, 1) = centers[i].y;
+	for (auto i: centers) {
+		temp(0) = i.x;
+		temp(1) = i.y;
+		u_i.push_back(temp);
 	}
-	corners.col(2).setOnes(); // Set the 3rd column to ones
-
-	return corners;
 }
 
 // Gets the chessboard points in an image
 bool get_chessboard_points(cv::Mat &img, const cv::Size &patternsize,
-		Eigen::MatrixXd &us,
-		Eigen::MatrixXd &ups)
+		std::vector<Eigen::Vector3d> &u_i)
 {
 	std::vector<cv::Point2f> centers; // filled by the detected centers
 
@@ -36,7 +35,7 @@ bool get_chessboard_points(cv::Mat &img, const cv::Size &patternsize,
 	cv::drawChessboardCorners(img, patternsize, centers_mat, patternfound);
 
 	// Extract the center points
-	us = centers_to_eigen(centers);
+	centers_to_eigen(centers, u_i);
 
 	// Now find the second points
 	patternfound = cv::findChessboardCornersSB(img, patternsize, centers);
@@ -47,7 +46,7 @@ bool get_chessboard_points(cv::Mat &img, const cv::Size &patternsize,
 	cv::drawChessboardCorners(img, patternsize, centers_mat, patternfound);
 
 	// Extract the second set of center points
-	ups = centers_to_eigen(centers);
+	centers_to_eigen(centers, u_i);
 
 	return true;
 }
