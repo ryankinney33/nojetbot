@@ -153,6 +153,12 @@ target_link_libraries(camera_calibration_test
    Eigen3::Eigen
 )
 
+add_executable(camera_calibration src/main.cpp src/image.cpp)
+target_link_libraries(camera_calibration
+   ${catkin_LIBRARIES}
+   ${OpenCV_LIBRARIES}
+   Eigen3::Eigen
+)
 #############
 ## Install ##
 #############
