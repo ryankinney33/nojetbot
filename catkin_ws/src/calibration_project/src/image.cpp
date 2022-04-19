@@ -1,10 +1,8 @@
 #include <opencv2/calib3d.hpp>
 #include <opencv2/core.hpp>
-#include <opencv2/imgcodecs.hpp>
+//#include <opencv2/imgcodecs.hpp>
 #include <Eigen/Dense>
-
 #include <iostream>
-#include <string>
 
 // Convert the image centers into an eigen matrix
 static Eigen::MatrixXd centers_to_eigen(const std::vector<cv::Point2f> &centers)
@@ -21,7 +19,6 @@ static Eigen::MatrixXd centers_to_eigen(const std::vector<cv::Point2f> &centers)
 
 	return corners;
 }
-
 
 // Gets the chessboard points in an image
 bool get_chessboard_points(cv::Mat &img, const cv::Size &patternsize,
