@@ -6,7 +6,7 @@
 
 
 //Small issues I need the corresponding 2d image points and 3d world points
-Eigen::MatrixXd find_p(const std::vector<Eigen::Vector4d>& X_i, const std::vector<Eigen::Vector3d>& u_i)
+Eigen::MatrixXd find_p(const std::vector<Eigen::Vector3d>& X_i, const std::vector<Eigen::Vector3d>& u_i)
 {
 	/*
 	if(points.size() < 0){
@@ -14,7 +14,7 @@ Eigen::MatrixXd find_p(const std::vector<Eigen::Vector4d>& X_i, const std::vecto
 		throw std::runtime_error("Need more points");
 	}
 	*/
-	Eigen::MatrixXd P;
+	Eigen::MatrixXd Projection_Matrix;
 	Eigen::Matrix3d u; //Write the cross product as a matrix operation
 	u << 0, -u_i(2), u_i(1),
 	  u_i(2), 0, -u_i(0),
@@ -31,8 +31,14 @@ Eigen::MatrixXd find_p(const std::vector<Eigen::Vector4d>& X_i, const std::vecto
 	      -u_i(1) * X.transpose(), u_i(0) * X_i.transpose(), 0;
 	unsigned int rows = knowns.row();
 	knowns.row(rows).setZero();
+//Add a for loop that iterates over all points for u_i
+	auto svd  = knowns.jacobiSvd(Eigen::ComputeFullV);
+	
+	Eigen::VectorXd  nullspace = svd.matrixV().col(11);
 
-	auto 
+	Projection_Matrix = nullspace;
+
+	return Projection_Matrix;
 
 	
 
