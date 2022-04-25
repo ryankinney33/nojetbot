@@ -22,16 +22,15 @@ int main(int argc, char *argv[]) {
 
 	std::cout << "Opening: " << path << std::endl;
 
-	cv::Mat img = cv::imread(path, cv::IMREAD_GRAYSCALE);
 	cv::Mat img_corners = cv::imread(path);
-	if (img.empty()) {
+	if (img_corners.empty()) {
 		std::cerr << "Error: Failed to load the image." << std::endl;
 		return 1;
 	}
 
 	// Show the image on the screen
 	cv::namedWindow("image", cv::WINDOW_AUTOSIZE);
-	cv::imshow("image", img);
+	cv::imshow("image", img_corners);
 	cv::waitKey(-1);
 
 	cv::Size patternsize(6,9); // number of centers
