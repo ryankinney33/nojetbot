@@ -35,16 +35,16 @@ Eigen::MatrixXd find_p(const std::vector<Eigen::Vector4d>& X_i, const std::vecto
 		row += 2;
 	}
 
-	std::cout << "A\n" << A << std::endl;
-/*	auto svd  = Projection_Matrix.jacobiSvd(Eigen::ComputeFullV);
+	// Compute SVD and get nullspace
+	auto svd  = A.jacobiSvd(Eigen::ComputeFullV);
+	auto nullspace = svd.matrixV().col(11);
 
-	Eigen::VectorXd  nullspace = svd.matrixV().col(X_i.size()-1);
+	// Combine into P matrix
+	Eigen::MatrixXd P(3, 4);
 
-	Eigen::MatrixXd projection(u_i.size(),X_i.size());
-	projection.row(0) = nullspace.block(0,0,3,1).transpose();
-	projection.row(1) = nullspace.block(3,0,3,1).transpose();
-	projection.row(2) = nullspace.block(6,0,3,1).transpose();
-*/
-//	return projection;
-	return A;
+	P.row(0) = nullspace.block(0,0,4,1).transpose();
+	P.row(1) = nullspace.block(4,0,4,1).transpose();
+	P.row(2) = nullspace.block(8,0,4,1).transpose();
+
+	return P;
 }

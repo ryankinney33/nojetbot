@@ -67,5 +67,7 @@ int main(int argc, char *argv[]) {
 	cv::waitKey(-1);
 
 	Eigen::MatrixXd P = find_p(X_i, u_i);
+	std::cout << "P:\n" << P << std::endl;
+
 	return 0;
 }
