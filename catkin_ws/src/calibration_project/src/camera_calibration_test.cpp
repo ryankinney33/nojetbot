@@ -54,7 +54,7 @@ int main(int argc, char *argv[]) {
 
 	// Get and print the points X_i
 	std::vector<Eigen::Vector4d> X_i;
-	get_3d_points(6, 9, 1, X_i);
+	get_3d_points(6, 9, 1, 1, X_i);
 	std::cout << std::endl;
 	// Print the points to stdout
 	std::cout << "X_i (transpose)\n";
@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
 	cv::waitKey(-1);
 
 	Eigen::MatrixXd P = find_p(X_i, u_i);
-	std::cout << "P:\n" << P << std::endl;
+	std::cout << "\nP:\n" << P << std::endl;
 
 	return 0;
 }
