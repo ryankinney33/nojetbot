@@ -2,3 +2,4 @@
 build/
 devel/
 catkin_ws/src/CMakeLists.txt
+*.swp
