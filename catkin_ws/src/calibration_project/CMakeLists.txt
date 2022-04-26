@@ -145,7 +145,7 @@ ${OpenCV_INCLUDE_DIRS}
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 #add_executable(camera_calibration_test src/camera_calibration_test.cpp src/image.cpp)
-add_executable(camera_calibration_test src/camera_calibration_test.cpp src/image.cpp)
+add_executable(camera_calibration_test src/camera_calibration_test.cpp src/image.cpp src/calc.cpp)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(camera_calibration_test
    ${catkin_LIBRARIES}
@@ -153,7 +153,7 @@ target_link_libraries(camera_calibration_test
    Eigen3::Eigen
 )
 
-add_executable(camera_calibration src/main.cpp src/image.cpp)
+add_executable(camera_calibration src/main.cpp src/image.cpp src/calc.cpp)
 target_link_libraries(camera_calibration
    ${catkin_LIBRARIES}
    ${OpenCV_LIBRARIES}
