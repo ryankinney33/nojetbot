@@ -2,15 +2,25 @@
 #include <opencv2/core.hpp>
 #include <Eigen/Dense>
 #include <iostream>
+#include <algorithm>
 
 #include "image.hpp"
 
 // Convert the image centers into an eigen matrix
-static void centers_to_eigen(const std::vector<cv::Point2f> &centers,
+static void centers_to_eigen(std::vector<cv::Point2f> &centers,
 		std::vector<Eigen::Vector3d> &u_i)
 {
 	Eigen::Vector3d temp;
 	temp(2) = 1;
+
+	// Compare the first and last point
+	auto back = centers.back();
+	auto head = centers.front();
+
+	// Check if the order needs to be reversed
+	if (head.x > back.x && head.y > back.y) {
+		std::reverse(centers.begin(), centers.end());
+	}
 
 	// Iterate over the points in the vector
 	for (auto i: centers) {
@@ -30,32 +40,33 @@ bool get_chessboard_points(cv::Mat &img, const cv::Size &patternsize,
 	bool patternfound = cv::findChessboardCornersSB(img, patternsize, centers);
 	if (!patternfound)
 		return false;
-	// Draw the points on the image
-	cv::Mat centers_mat(centers);
-	cv::drawChessboardCorners(img, patternsize, centers_mat, patternfound);
 
 	// Extract the center points
 	centers_to_eigen(centers, u_i);
+
+	// Draw the points on the image
+	cv::Mat centers_mat(centers);
+	cv::drawChessboardCorners(img, patternsize, centers_mat, patternfound);
 
 	// Now find the second points
 	patternfound = cv::findChessboardCornersSB(img, patternsize, centers);
 	if (!patternfound)
 		return false;
 
-	// Draw the second set of points on the image
-	cv::drawChessboardCorners(img, patternsize, centers_mat, patternfound);
-
 	// Extract the second set of center points
 	centers_to_eigen(centers, u_i);
+
+	// Draw the second set of points on the image
+	cv::drawChessboardCorners(img, patternsize, centers_mat, patternfound);
 
 	return true;
 }
 
 // Gets the 3D representation of the chessboard points
-void get_3d_points(int width, int height, double square_size, std::vector<Eigen::Vector3d> &X_i)
+void get_3d_points(int width, int height, double square_size, std::vector<Eigen::Vector4d> &X_i)
 {
-	Eigen::Vector3d temp;
-
+	Eigen::Vector4d temp;
+	temp(3) = 1;
 	/*
 	 * Assumptions:
 	 *   1. The left chessboard was detected first
