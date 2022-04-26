@@ -5,15 +5,14 @@
 
 #include "calc.hpp"
 
-void intrinsic_CameraMatrix(const Eigen::MatrixXd& projection)
+Eigen::Matrix3d find_k(const Eigen::MatrixXd& projection)
 {
-	Eigen::MatrixXd calc = projection.block(0,0,3,3);
-	Eigen::MatrixXd K = Eigen::MatrixXd::Identity(calc.rows(),calc.cols());
-	K = K / K(2,2);
-
-	std::cout << "K : " << K << "\n";
-	std::cout << "R:  " << calc << "\n";
-	std::cout << "t: " << K.inverse() * projection.block(0,3,3,1) << "\n";
+	Eigen::Matrix3d M = projection.leftCols(3);
+	auto QR = M.householderQr();
+	auto R = QR.matrixQR().triangularView<Eigen::Upper>();
+	auto Q = QR.householderQ();
+	return Q;
+`		
 }
 
 Eigen::MatrixXd find_p(const std::vector<Eigen::Vector4d>& X_i, const std::vector<Eigen::Vector3d>& u_i)
