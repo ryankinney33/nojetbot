@@ -16,24 +16,27 @@ void intrinsic_CameraMatrix(const Eigen::MatrixXd& projection)
 	std::cout << "t: " << K.inverse() * projection.block(0,3,3,1) << "\n";
 }
 
-//Small issues I need the corresponding 2d image points and 3d world points
 Eigen::MatrixXd find_p(const std::vector<Eigen::Vector4d>& X_i, const std::vector<Eigen::Vector3d>& u_i)
 {
 	if(X_i.size() < 6 || u_i.size() < 6){
 		std::cerr << "Need at least 6 points to find the projection matrix\n";
 		throw std::runtime_error("Need more points");
 	}
-	Eigen::MatrixXd Projection_Matrix(2*u_i.size(), X_i.size() * u_i.size());
-	Projection_Matrix.setZero();
+
+	// P matrix is 2n * 12 large
+	Eigen::MatrixXd A(2*u_i.size(), 12);
+	A.setZero();
+	int row = 0;
 	for(int i = 0; i < u_i.size(); ++i){
-		Projection_Matrix.block(2*i, X_i.size(),1,X_i.size()) = -X_i[i](2) * u_i[i].transpose();
-		Projection_Matrix.block(2*i, X_i.size() * 2,1,X_i.size()) = X_i[i](1) * u_i[i].transpose();
-		Projection_Matrix.block(2*i + 1, 0,1,X_i.size()) = -X_i[i](2) * u_i[i].transpose();
-		Projection_Matrix.block(2*i + 1, X_i.size() * 2,1,X_i.size()) = X_i[i](0) * u_i[i].transpose();
-
-
+		A.block(row, 4, 1, 4) = -u_i.at(i)(2) * X_i.at(i).transpose();
+		A.block(row, 8, 1, 4) = u_i.at(i)(1) * X_i.at(i).transpose();
+		A.block(row+1, 0, 1, 4) = u_i.at(i)(2) * X_i.at(i).transpose();
+		A.block(row+1, 8, 1, 4) = -u_i.at(i)(0) * X_i.at(i).transpose();
+		row += 2;
 	}
-	auto svd  = Projection_Matrix.jacobiSvd(Eigen::ComputeFullV);
+
+	std::cout << "A\n" << A << std::endl;
+/*	auto svd  = Projection_Matrix.jacobiSvd(Eigen::ComputeFullV);
 
 	Eigen::VectorXd  nullspace = svd.matrixV().col(X_i.size()-1);
 
@@ -41,6 +44,7 @@ Eigen::MatrixXd find_p(const std::vector<Eigen::Vector4d>& X_i, const std::vecto
 	projection.row(0) = nullspace.block(0,0,3,1).transpose();
 	projection.row(1) = nullspace.block(3,0,3,1).transpose();
 	projection.row(2) = nullspace.block(6,0,3,1).transpose();
-
-	return projection;
+*/
+//	return projection;
+	return A;
 }

@@ -7,6 +7,7 @@
 #include <string>
 
 #include "image.hpp"
+#include "calc.hpp"
 
 int main(int argc, char *argv[]) {
 
@@ -65,5 +66,6 @@ int main(int argc, char *argv[]) {
 	cv::imshow("image", img_corners);
 	cv::waitKey(-1);
 
+	Eigen::MatrixXd P = find_p(X_i, u_i);
 	return 0;
 }
