@@ -38,10 +38,20 @@ bool get_chessboard_points(cv::Mat &img, const cv::Size &patternsize,
 	std::vector<cv::Point2f> centers; // filled by the detected centers
 	std::vector<cv::Point2f> centers2; // filled by the detected centers
 
-	// Find the first set of chessboard points
-	bool patternfound = cv::findChessboardCornersSB(img, patternsize, centers);
-	if (!patternfound)
-		return false;
+	// Find the left set of chessboard points
+	cv::Rect roi; // region of interest in the image (growing window)
+	roi.x = 0;
+	roi.y = 0;
+	roi.height = img.size().height;
+	roi.width = img.size().width/4.0;
+	bool patternfound;
+	do {
+		patternfound = cv::findChessboardCornersSB(img(roi), patternsize, centers);
+		roi.width += img.size().width/4.0 - 1.0;
+		if (roi.width > img.size().width) {
+			return false;
+		}
+	} while (!patternfound);
 
 	// Find the maximum x value in the left chessboard
 	double x = centers.at(0).x;
@@ -50,11 +60,7 @@ bool get_chessboard_points(cv::Mat &img, const cv::Size &patternsize,
 			x = i.x;
 	}
 
-	// Define a region of interest in the image
-	cv::Rect roi;
 	roi.x = x;
-	roi.y = 0;
-	roi.height = img.size().height;
 	roi.width = img.size().width - x;
 
 	// Extract the center points
