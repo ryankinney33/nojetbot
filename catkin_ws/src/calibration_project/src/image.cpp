@@ -1,5 +1,6 @@
 #include <opencv2/calib3d.hpp>
 #include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
 #include <Eigen/Dense>
 #include <iostream>
 #include <algorithm>
@@ -35,11 +36,26 @@ bool get_chessboard_points(cv::Mat &img, const cv::Size &patternsize,
 		std::vector<Eigen::Vector3d> &u_i)
 {
 	std::vector<cv::Point2f> centers; // filled by the detected centers
+	std::vector<cv::Point2f> centers2; // filled by the detected centers
 
 	// Find the first set of chessboard points
 	bool patternfound = cv::findChessboardCornersSB(img, patternsize, centers);
 	if (!patternfound)
 		return false;
+
+	// Find the maximum x value in the left chessboard
+	double x = centers.at(0).x;
+	for (const auto &i : centers) {
+		if (i.x > x)
+			x = i.x;
+	}
+
+	// Define a region of interest in the image
+	cv::Rect roi;
+	roi.x = x;
+	roi.y = 0;
+	roi.height = img.size().height;
+	roi.width = img.size().width - x;
 
 	// Extract the center points
 	centers_to_eigen(centers, u_i);
@@ -49,15 +65,21 @@ bool get_chessboard_points(cv::Mat &img, const cv::Size &patternsize,
 	cv::drawChessboardCorners(img, patternsize, centers_mat, patternfound);
 
 	// Now find the second points
-	patternfound = cv::findChessboardCornersSB(img, patternsize, centers);
+	patternfound = cv::findChessboardCornersSB(img(roi), patternsize, centers2);
 	if (!patternfound)
 		return false;
 
+	// Add the offset
+	for (auto &i : centers2) {
+		i.x += x;
+	}
+
 	// Extract the second set of center points
-	centers_to_eigen(centers, u_i);
+	centers_to_eigen(centers2, u_i);
 
 	// Draw the second set of points on the image
-	cv::drawChessboardCorners(img, patternsize, centers_mat, patternfound);
+	cv::Mat centers_mat2(centers2);
+	cv::drawChessboardCorners(img, patternsize, centers_mat2, patternfound);
 
 	return true;
 }

@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
 	cv::imshow("image", img_corners);
 	cv::waitKey(-1);
 
-	cv::Size patternsize(6,9); // number of centers
+	cv::Size patternsize(6,8); // number of centers
 
 	// Matrices to hold the points
 	std::vector<Eigen::Vector3d> u_i;
@@ -54,7 +54,8 @@ int main(int argc, char *argv[]) {
 
 	// Get and print the points X_i
 	std::vector<Eigen::Vector4d> X_i;
-	get_3d_points(6, 9, 0.026, 0.026, X_i);
+	get_3d_points(6, 8, 0.009, 0.025, X_i);
+
 	std::cout << std::endl;
 	// Print the points to stdout
 	std::cout << "X_i (transpose)\n";
