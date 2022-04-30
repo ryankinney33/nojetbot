@@ -17,17 +17,10 @@ static std::pair<Eigen::Matrix3d, Eigen::Matrix3d> gramschmidt(const Eigen::Matr
 	Eigen::Vector3d b = M.row(1);
 	Eigen::Vector3d a = M.row(2);
 
-	std::cout << "\nc\n" << c << std::endl;
-	std::cout << "\nb\n" << b << std::endl;
-	std::cout << "\na\n" << a << std::endl;
-
 	// create the unit vectors r1, r2, r3
 	auto r1 = a.normalized();
 	auto r2 = (b - (b.transpose()*r1)*r1).normalized();
 	auto r3 = (c - (c.transpose()*r2)*r2 - (c.transpose()*r1)*r1).normalized();
-	std::cout << "\nr3\n" << r3 << std::endl;
-	std::cout << "\nr2\n" << r2 << std::endl;
-	std::cout << "\nr1\n" << r1 << std::endl;
 
 	R.row(0) = r3.transpose();
 	R.row(1) = r2.transpose();
@@ -60,9 +53,9 @@ void find_k(const Eigen::MatrixXd& P)
 	auto  t = K.inverse() * P.rightCols(1);
 
 	// Print the information
-	std::cout << "K =\n" << K;
-	std::cout << "\nR =\n" << R;
-	std::cout << "\nt =\n" << t << std::endl;
+	std::cout << "K:\n" << K;
+	std::cout << "\n\nR:\n" << R;
+	std::cout << "\n\nt:\n" << t << std::endl;
 }
 
 Eigen::MatrixXd find_p(const std::vector<Eigen::Vector4d>& X_i, const std::vector<Eigen::Vector3d>& u_i)
@@ -92,9 +85,7 @@ Eigen::MatrixXd find_p(const std::vector<Eigen::Vector4d>& X_i, const std::vecto
 	// Compute SVD and get nullspace
 	auto svd  = A.jacobiSvd(Eigen::ComputeFullV);
 	//auto nullspace = svd.matrixV().rightCols(1);
-	auto nullspace = svd.matrixV().col(10);
-
-	std::cout << "nullspace\n" << nullspace << "\n";
+	auto nullspace = svd.matrixV().col(11);
 
 	// Combine into P matrix
 	Eigen::MatrixXd P(u_dim, x_dim);

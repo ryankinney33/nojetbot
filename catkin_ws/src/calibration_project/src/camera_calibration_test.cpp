@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
 	cv::waitKey(-1);
 
 	Eigen::MatrixXd P = find_p(X_i, u_i);
-	std::cout << "\nP:\n" << P << std::endl;
+	std::cout << "\nP:\n" << P << "\n\n";
 
 	// finally, find and print the camera matrices
 	find_k(P);
