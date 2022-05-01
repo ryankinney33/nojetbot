@@ -52,11 +52,7 @@ void imageCallback(const sensor_msgs::Image::ConstPtr& msg)
 int main(int argc, char *argv[])
 {
 	if (argc < 5) {
-		std::cerr << argc << "\n";
-		//std::cerr << "Usage: " << argv[0] << " gridWidth gridHeight squareSize bezelWidth\n";
-		for (int i = 0; i < argc; ++i) {
-			std::cerr << argv[i] << "\n";
-		}
+		std::cerr << "Usage: " << argv[0] << " gridWidth gridHeight squareSize bezelWidth\n";
 		return 1;
 	}
 
