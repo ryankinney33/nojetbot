@@ -9,18 +9,33 @@
 #include "image.hpp"
 #include "calc.hpp"
 
-int main(int argc, char *argv[]) {
-
+int main(int argc, char *argv[])
+{
 	// Holds the path of the image to open
 	std::string path;
 
-	if (argc < 2) {
-		std::cerr << "No image specified." << std::endl;
+	if (argc != 7) {
+		std::cerr << "Usage: " << argv[0] << " image_path gridWidth gridHeight squareSize bezelWidth bezelHeight\n";
 		return 1;
 	}
 
-	path = argv[1];
+	// Parse the command-line arguments to get the sizes
+	// they are image_path, grid width, grid height, square size (mm),
+	// vert. bezel size (mm), horiz. bezel size (mm)
+	int width, height;
+	double square_size, vert, horiz;
 
+	// extract width and height
+	width = std::stoi(argv[2]);
+	height = std::stoi(argv[3]);
+
+	// physical dimensions
+	square_size = std::stod(argv[4])/1000.0;
+	vert = std::stod(argv[5])/1000.0;
+	horiz = std::stod(argv[6])/1000.0;
+
+	// finally, image path
+	path = argv[1];
 	std::cout << "Opening: " << path << std::endl;
 
 	cv::Mat img_corners = cv::imread(path);
@@ -34,7 +49,7 @@ int main(int argc, char *argv[]) {
 	cv::imshow("image", img_corners);
 	cv::waitKey(-1);
 
-	cv::Size patternsize(6,8); // number of centers
+	cv::Size patternsize(width, height); // number of centers
 
 	// Matrices to hold the points
 	std::vector<Eigen::Vector3d> u_i;
@@ -54,7 +69,7 @@ int main(int argc, char *argv[]) {
 
 	// Get and print the points X_i
 	std::vector<Eigen::Vector4d> X_i;
-	get_3d_points(6, 8, 0.009, 0.025, X_i);
+	get_3d_points(width, height, square_size, horiz, vert, X_i);
 
 	std::cout << std::endl;
 	// Print the points to stdout
