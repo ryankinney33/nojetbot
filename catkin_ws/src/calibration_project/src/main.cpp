@@ -43,7 +43,6 @@ void imageCallback(const sensor_msgs::Image::ConstPtr& msg)
 	std::vector<Eigen::Vector3d> u_i;
 	bool success = get_chessboard_points(img, patternsize, u_i);
 	if (success) {
-
 		// Points found, get the P matrix
 		Eigen::MatrixXd P = find_p(X_i, u_i);
 
@@ -60,8 +59,12 @@ void imageCallback(const sensor_msgs::Image::ConstPtr& msg)
 // The main function to setup everything and start the ros listener
 int main(int argc, char *argv[])
 {
-	if (argc != 5) {
-		std::cerr << "Usage: " << argv[0] << " gridWidth gridHeight squareSize bezelWidth\n";
+	if (argc < 5) {
+		std::cerr << argc << "\n";
+		//std::cerr << "Usage: " << argv[0] << " gridWidth gridHeight squareSize bezelWidth\n";
+		for (int i = 0; i < argc; ++i) {
+			std::cerr << argv[i] << "\n";
+		}
 		return 1;
 	}
 
