@@ -6,7 +6,7 @@
 #include <iostream>
 #include <string>
 
-#include "image.hpp"
+#include "points.hpp"
 #include "calc.hpp"
 
 int main(int argc, char *argv[])

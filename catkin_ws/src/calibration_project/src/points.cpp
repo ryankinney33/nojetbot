@@ -5,7 +5,7 @@
 #include <iostream>
 #include <algorithm>
 
-#include "image.hpp"
+#include "points.hpp"
 
 // Convert the image centers into an eigen matrix
 static void centers_to_eigen(std::vector<cv::Point2f> &centers,

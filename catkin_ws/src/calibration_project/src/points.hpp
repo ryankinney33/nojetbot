@@ -1,5 +1,5 @@
-#ifndef IMAGE_H
-#define IMAGE_H
+#ifndef POINTS_H
+#define POINTS_H
 
 #include <Eigen/Dense>
 #include <opencv2/core.hpp>
@@ -13,4 +13,4 @@ bool get_chessboard_points(cv::Mat &img, const cv::Size &patternsize,
 void get_3d_points(int width, int height, double square_size, double bezel_width,
 		std::vector<Eigen::Vector4d> &X_i);
 
-#endif /* IMAGE_H */
+#endif /* POINTS_H */
