@@ -40,6 +40,7 @@ static std::pair<Eigen::Matrix3d, Eigen::Matrix3d> gramschmidt(const Eigen::Matr
 	return std::make_pair(K, R);
 }
 
+// Calculate and print K, R, and t from projection matrix P
 void find_k(const Eigen::MatrixXd& P)
 {
 	Eigen::Matrix3d M = P.leftCols(3);
@@ -58,6 +59,7 @@ void find_k(const Eigen::MatrixXd& P)
 	std::cout << "\n\nt:\n" << t << std::endl;
 }
 
+// Calculate projection matrix P given image points and corresponding 3d points
 Eigen::MatrixXd find_p(const std::vector<Eigen::Vector4d>& X_i, const std::vector<Eigen::Vector3d>& u_i)
 {
 	if(X_i.size() < 6 || u_i.size() < 6){

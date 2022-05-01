@@ -97,8 +97,8 @@ void get_3d_points(int width, int height, double square_size, double bezel_width
 	 * Assumptions:
 	 *   1. The left chessboard was detected first
 	 *   2. The top left point was the first detected
-	 *   3. The z-axis is the horizontal position on the right board
-	 *   4. The y-axis is the horizontal position of the left board
+	 *   3. The z-axis is the horizontal position on the left board
+	 *   4. The y-axis is the horizontal position of the right board
 	 *   5. The x-axis is the vertical position
 	 */
 

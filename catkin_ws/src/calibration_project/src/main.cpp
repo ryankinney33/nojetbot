@@ -1,23 +1,17 @@
-#include "points.hpp"
-#include "calc.hpp"
-
+// For ROS
 #include "ros/ros.h"
 #include "sensor_msgs/Image.h"
-#include <iostream>
-#include <vector>
-#include <cstdlib>
 
 #include <Eigen/Dense>
 #include <cv_bridge/cv_bridge.h>
-#include <sensor_msgs/image_encodings.h>
-
-#include <opencv2/calib3d.hpp>
 #include <opencv2/core.hpp>
-#include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
 
-#include <opencv2/core/eigen.hpp>
-#include <opencv2/imgproc.hpp>
+#include <iostream>
+#include <vector>
+
+#include "points.hpp"
+#include "calc.hpp"
 
 static cv::Size patternsize; // holds the dimensions of the chessboard
 static std::vector<Eigen::Vector4d> X_i; // holds the 3d points of the chessboard corners
@@ -27,9 +21,7 @@ void imageCallback(const sensor_msgs::Image::ConstPtr& msg)
 	// Read the image into an OpenCV image
 	cv_bridge::CvImageConstPtr cv_image_ptr;
 	try {
-		cv_image_ptr = cv_bridge::toCvShare(
-		msg,
-		sensor_msgs::image_encodings::BGR8);
+		cv_image_ptr = cv_bridge::toCvShare(msg, sensor_msgs::image_encodings::BGR8);
 	} catch (cv_bridge::Exception& e) {
 		ROS_FATAL("cv_bridge exception: %s", e.what());
 		return;
@@ -100,9 +92,8 @@ int main(int argc, char *argv[])
 	get_3d_points(width, height, square_size, bezel_width, X_i); // 3d chessboard points
 
 	// Start the ROS node
-	ros::init(argc, argv, "find_checkerboard");
+	ros::init(argc, argv, "camera_calibration");
 	ros::NodeHandle n;
-
 	ros::Subscriber sub = n.subscribe("/cv_camera/image_raw", 1, &imageCallback);
 	ros::spin();
 
