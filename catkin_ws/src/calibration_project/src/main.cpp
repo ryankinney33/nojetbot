@@ -57,8 +57,8 @@ int main(int argc, char *argv[])
 	}
 
 	// Parse the command-line arguments to get the sizes
-	// they are image_path, grid width, grid height, square size (mm),
-	// vert. bezel size (mm), horiz. bezel size (mm)
+	// they are grid width, grid height, square size (mm),
+	// and bezel size (mm)
 	int width, height;
 	double square_size, bezel_width;
 
