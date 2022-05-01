@@ -7,7 +7,7 @@ project(calibration_project)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED roscpp cv_bridge)
 find_package(OpenCV 4.2 REQUIRED)
 find_package(Eigen3 3.3 REQUIRED)
 
@@ -153,7 +153,7 @@ target_link_libraries(camera_calibration_test
    Eigen3::Eigen
 )
 
-add_executable(camera_calibration src/main.cpp src/image.cpp src/calc.cpp)
+add_executable(camera_calibration src/main.cpp src/image.cpp src/calc.cpp src/sub_chess.cpp)
 target_link_libraries(camera_calibration
    ${catkin_LIBRARIES}
    ${OpenCV_LIBRARIES}
