@@ -19,4 +19,6 @@
 #include <opencv2/imgproc.hpp>
 
 void image_sub();
-void imageCallback(const sensor_msgs::Image::ConstPtr& msg)
+void imageCallback(const sensor_msgs::Image::ConstPtr& msg);
+
+#endif
