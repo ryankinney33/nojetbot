@@ -52,7 +52,7 @@ void imageCallback(const sensor_msgs::Image::ConstPtr& msg)
 		ros::shutdown();
 		// Show the updated image
 		cv::imshow("IMG", img);
-		cv::waitKey(-1);
+		cv::waitKey(1000);
 	}
 }
 
