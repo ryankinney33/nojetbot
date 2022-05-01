@@ -29,7 +29,7 @@ void imageCallback(const sensor_msgs::Image::ConstPtr& msg)
 	try {
 		cv_image_ptr = cv_bridge::toCvShare(
 		msg,
-		sensor_msgs::image_encodings::RGB8);
+		sensor_msgs::image_encodings::BGR8);
 	} catch (cv_bridge::Exception& e) {
 		ROS_FATAL("cv_bridge exception: %s", e.what());
 		return;
@@ -37,13 +37,12 @@ void imageCallback(const sensor_msgs::Image::ConstPtr& msg)
 	auto img = cv_image_ptr->image.clone();
 	// Show the image on the screen
 	cv::imshow("IMG", img);
+	cv::waitKey(1);
 
 	// Look for chessboard points
 	std::vector<Eigen::Vector3d> u_i;
 	bool success = get_chessboard_points(img, patternsize, u_i);
 	if (success) {
-		// Show the updated image
-		cv::imshow("IMG", img);
 
 		// Points found, get the P matrix
 		Eigen::MatrixXd P = find_p(X_i, u_i);
@@ -52,6 +51,9 @@ void imageCallback(const sensor_msgs::Image::ConstPtr& msg)
 		find_k(P);
 
 		ros::shutdown();
+		// Show the updated image
+		cv::imshow("IMG", img);
+		cv::waitKey(-1);
 	}
 }
 
@@ -71,12 +73,12 @@ int main(int argc, char *argv[])
 
 	try {
 		// extract width and height
-		width = std::stoi(argv[2]);
-		height = std::stoi(argv[3]);
+		width = std::stoi(argv[1]);
+		height = std::stoi(argv[2]);
 
 		// physical dimensions
-		square_size = std::stod(argv[4])/1000.0;
-		bezel_width = std::stod(argv[5])/1000.0;
+		square_size = std::stod(argv[3])/1000.0;
+		bezel_width = std::stod(argv[4])/1000.0;
 	} catch(const std::invalid_argument& e) {
 		// A conversion failed
 		std::cerr << "Error: arguments except the image path must be numerical.\n";
