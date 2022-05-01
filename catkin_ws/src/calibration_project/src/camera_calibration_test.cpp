@@ -14,8 +14,8 @@ int main(int argc, char *argv[])
 	// Holds the path of the image to open
 	std::string path;
 
-	if (argc != 7) {
-		std::cerr << "Usage: " << argv[0] << " image_path gridWidth gridHeight squareSize bezelWidth bezelHeight\n";
+	if (argc != 6) {
+		std::cerr << "Usage: " << argv[0] << " image_path gridWidth gridHeight squareSize bezelWidth\n";
 		return 1;
 	}
 
@@ -23,16 +23,28 @@ int main(int argc, char *argv[])
 	// they are image_path, grid width, grid height, square size (mm),
 	// vert. bezel size (mm), horiz. bezel size (mm)
 	int width, height;
-	double square_size, vert, horiz;
+	double square_size, bezel_width;
 
-	// extract width and height
-	width = std::stoi(argv[2]);
-	height = std::stoi(argv[3]);
+	try {
+		// extract width and height
+		width = std::stoi(argv[2]);
+		height = std::stoi(argv[3]);
 
-	// physical dimensions
-	square_size = std::stod(argv[4])/1000.0;
-	vert = std::stod(argv[5])/1000.0;
-	horiz = std::stod(argv[6])/1000.0;
+		// physical dimensions
+		square_size = std::stod(argv[4])/1000.0;
+		bezel_width = std::stod(argv[5])/1000.0;
+	} catch(const std::invalid_argument& e) {
+		// A conversion failed
+		std::cerr << "Error: arguments except the image path must be numerical.\n";
+		return 1;
+	} catch(const std::out_of_range& e) {
+		// Out of range error
+		std::cerr << "Error: argument out of range\n";
+		return 1;
+	}
+
+	// Make sure the numbers were positive
+	assert(width > 0 && height > 0 && square_size > 0 && bezel_width > 0);
 
 	// finally, image path
 	path = argv[1];
@@ -69,7 +81,7 @@ int main(int argc, char *argv[])
 
 	// Get and print the points X_i
 	std::vector<Eigen::Vector4d> X_i;
-	get_3d_points(width, height, square_size, horiz, vert, X_i);
+	get_3d_points(width, height, square_size, bezel_width, X_i);
 
 	std::cout << std::endl;
 	// Print the points to stdout

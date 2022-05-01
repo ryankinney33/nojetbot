@@ -92,7 +92,7 @@ bool get_chessboard_points(cv::Mat &img, const cv::Size &patternsize,
 
 // Gets the 3D representation of the chessboard points
 void get_3d_points(int width, int height, double square_size, double bezel_width,
-		double bezel_height, std::vector<Eigen::Vector4d> &X_i)
+		std::vector<Eigen::Vector4d> &X_i)
 {
 	Eigen::Vector4d temp;
 	temp(3) = 1.0;
@@ -108,7 +108,7 @@ void get_3d_points(int width, int height, double square_size, double bezel_width
 	// Go through the left chessboard first
 	temp(1) = 0.0; // y = 0 on left chessboard
 	for (int i = 0; i < height; ++i) {
-		temp(0) = bezel_height + square_size * (i + 1); // Points start at 1 unit down
+		temp(0) = square_size * (i + 1); // Points start at 1 unit down
 		for (int j = 0; j < width; ++j) {
 			temp(2) = bezel_width + square_size * (width - j); // Points start at width units left
 
@@ -119,7 +119,7 @@ void get_3d_points(int width, int height, double square_size, double bezel_width
 	// Go through the right chessboard first
 	temp(2) = 0; // z = 0 on right chessboard
 	for (int i = 0; i < height; ++i) {
-		temp(0) = bezel_height + square_size * (i + 1); // Points start at 1 unit down
+		temp(0) = square_size * (i + 1); // Points start at 1 unit down
 		for (int j = 0; j < width; ++j) {
 			temp(1) = bezel_width + square_size * (j + 1); // Points start at 1 units right
 			X_i.push_back(temp);

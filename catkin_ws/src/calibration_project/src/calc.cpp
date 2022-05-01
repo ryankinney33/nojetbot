@@ -84,8 +84,7 @@ Eigen::MatrixXd find_p(const std::vector<Eigen::Vector4d>& X_i, const std::vecto
 
 	// Compute SVD and get nullspace
 	auto svd  = A.jacobiSvd(Eigen::ComputeFullV);
-	//auto nullspace = svd.matrixV().rightCols(1);
-	auto nullspace = svd.matrixV().col(11);
+	auto nullspace = svd.matrixV().rightCols(1);
 
 	// Combine into P matrix
 	Eigen::MatrixXd P(u_dim, x_dim);
