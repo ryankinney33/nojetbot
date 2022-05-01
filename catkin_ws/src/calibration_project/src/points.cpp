@@ -60,15 +60,9 @@ bool get_chessboard_points(cv::Mat &img, const cv::Size &patternsize,
 			x = i.x;
 	}
 
+	// Set the region of interest to the right of the chess board
 	roi.x = x;
 	roi.width = img.size().width - x;
-
-	// Extract the center points
-	centers_to_eigen(centers, u_i);
-
-	// Draw the points on the image
-	cv::Mat centers_mat(centers);
-	cv::drawChessboardCorners(img, patternsize, centers_mat, patternfound);
 
 	// Now find the second points
 	patternfound = cv::findChessboardCornersSB(img(roi), patternsize, centers2);
@@ -80,12 +74,15 @@ bool get_chessboard_points(cv::Mat &img, const cv::Size &patternsize,
 		i.x += x;
 	}
 
-	// Extract the second set of center points
-	centers_to_eigen(centers2, u_i);
-
-	// Draw the second set of points on the image
+	// Draw the points on the image
+	cv::Mat centers_mat(centers);
+	cv::drawChessboardCorners(img, patternsize, centers_mat, patternfound);
 	cv::Mat centers_mat2(centers2);
 	cv::drawChessboardCorners(img, patternsize, centers_mat2, patternfound);
+
+	// Extract the center points
+	centers_to_eigen(centers, u_i);
+	centers_to_eigen(centers2, u_i);
 
 	return true;
 }
