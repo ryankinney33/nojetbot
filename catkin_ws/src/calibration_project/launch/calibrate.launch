@@ -6,6 +6,11 @@
 		<param name="image_height" value="720"/>
 	</node>
 
+	<!-- Launch the camera calibration program. -->
+	<!-- To change the chessboard parameters, modify the args in the line below. The numbers are in the following order -->
+	<!-- Chessboard width, Chessboard height, square size, and bezel width (the width between the vertex of the two chessboards and a square -->
+	<!-- The chessboard width and height correspond to the number of internal vertices. -->
+	<!-- The units for the the square size and bezel width are millimeters. -->
 	<node pkg="calibration_project" type="camera_calibration" name="camera_calibration417" args="6 8 25 9" output="screen" required="true">
 	</node>
 </launch>
